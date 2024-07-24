@@ -1,0 +1,3 @@
+Полезные ссылки
+1. Паттерны проектирования
+https://github.com/pkolt/design_patterns
