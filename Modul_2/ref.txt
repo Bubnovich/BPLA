@@ -1,3 +1,5 @@
 Полезные ссылки
 1. Паттерны проектирования
 https://github.com/pkolt/design_patterns
+2. Материалы по курсу (исходный код, задачи)
+https://drive.google.com/drive/u/0/folders/1iYcwUDnjN_hljHrRnAVjGmxuPbH-WJ_A
