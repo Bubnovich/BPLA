@@ -72,6 +72,35 @@ class QueryBuilder:
     def get_params(self):
         # Метод для получения списка параметров
         return self._params
+#Паттерн ORM
+class User:
+    def __init__(self, id, name_operator, contact, comment):
+        self.id = id
+        self.name_operator = name_operator
+        self.contact = contact
+        self.comment = comment
+
+class UserMapper:
+    def __init__(self, connection):
+        self.connection = connection
+
+    def get_user(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute(f"SELECT * FROM tbl_operators WHERE id={id}")
+        result = cursor.fetchall()
+        if result:
+            return User(id=result[0],
+                        name_operator=result[1],
+                        contact=result[2],
+                        comment=result[3])
+        return None
+
+    def add_user(self, user: User):
+        cursor = self.connection.cursor()
+        cursor.execute(f"INSERT INTO tbl_operators (name_operator, contact, comment) VALUES (?, ?, ?)",
+                       (user.name_operator, user.contact, user.comment))
+
+
 
 if __name__ == "__main__":
     sql = SQLiteDBFactory()
