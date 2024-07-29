@@ -9,7 +9,7 @@ class DBFactory(ABC):
 
 class SQLiteDBFactory(DBFactory):
     def connect(self):
-        return sqlite3.connect(':memory:')
+        return sqlite3.connect('test.db')
 
 # паттерн Строитель
 class QueryBuilder:
@@ -78,24 +78,37 @@ if __name__ == "__main__":
     connection = sql.connect()
     cursor = connection.cursor()
 
-    cursor.execute("""
-    CREATE TABLE tbl_drones (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        model TEXT,
-        manufacturer TEXT,
-        year INTEGER
-    )
-    """)
+    # drone = {
+    #     "model": "Model X",
+    #     "manufacturer": "SkyCorp",
+    #     "purchase_date": 2024,
+    #     "max_altitude": 300,
+    #     "max_speed": 70,
+    #     "max_flight_time": 30,
+    #     "serial_number": "GSSDF34523"
+    # }
 
     drone = {
-        "model": "Model X",
-        "manufacturer": "SkyCorp",
-        "year": 2024,
+        "model": "Model Y",
+        "manufacturer": "DronInc",
+        "purchase_date": 2023,
+        "max_altitude": 250,
+        "max_speed": 50,
+        "max_flight_time": 30,
+        "serial_number": "GSasdfw24523"
     }
+
     # Создание INSERT-запроса с использованием QueryBuilder
     query_builder = QueryBuilder()
-    insert_query = query_builder.insert_into("tbl_drones", ["model", "manufacturer", "year"]) \
-        .values(drone["model"], drone["manufacturer"], drone["year"]) \
+    insert_query = query_builder.insert_into("tbl_drones", ["model", "manufacturer", "serial_number",
+                                                            "purchase_date","max_altitude","max_speed","max_flight_time"]) \
+        .values(drone["model"],
+                drone["manufacturer"],
+                drone["serial_number"],
+                drone["purchase_date"],
+                drone["max_altitude"],
+                drone["max_speed"],
+                drone["max_flight_time"]) \
         .get_query()
 
     print(insert_query)  # Вывод сформированного запроса
