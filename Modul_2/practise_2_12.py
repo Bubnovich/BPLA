@@ -2,9 +2,10 @@ import sqlite3
 
 connection = sqlite3.connect('test.db')
 cursor = connection.cursor()
+
 # Таблица "Дроны"
 cursor.execute("""
-CREATE TABLE IF NOT EXIT tbl_drone (
+CREATE TABLE IF NOT EXISTS tbl_drones (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     max_altitude INTEGER,
     max_speed INTEGER,
@@ -12,9 +13,9 @@ CREATE TABLE IF NOT EXIT tbl_drone (
     serial_number TEXT UNIQUE NOT NULL,
     payload INTEGER,
     model TEXT NOT NULL,
-    manufacture TEXT NOT NULL,
+    manufacturer TEXT NOT NULL,
     purchase_date DATE,
-    software_version TEXT,
+    sofware_version TEXT,
     battery_capacity INTEGER,
     flight_hours INTEGER
 )
@@ -22,15 +23,49 @@ CREATE TABLE IF NOT EXIT tbl_drone (
 
 # Таблица "Статус"
 cursor.execute("""
-CREATE TABLE IF NOT EXIT tbl_status (
+CREATE TABLE IF NOT EXISTS tbl_status (    
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL
 )
 """)
 
+# Таблица "Техническое обслуживание"
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tbl_maintenance (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    drone_id INTEGER NOT NULL,
+    last_maintenance DATE,
+    description TEXT,
+    FOREIGN KEY (drone_id) REFERENCES tbl_drones(id)
+)
+""")
+
+# Таблица "Миссия"
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tbl_missions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type_mission TEXT UNIQUE NOT NULL,
+    name_mission NEXT UNIQUE NOT NULL,
+    description TEXT,
+    status TEXT,
+    start_date DATETIME,
+    end_date DATETIME
+)
+""")
+
+# Таблица "Оператор"
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tbl_operators (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name_operator TEXT UNIQUE NOT NULL,
+    contact TEXT,
+    comment TEXT
+)
+""")
+
 # Таблица "Статус Дронов"
 cursor.execute("""
-CREATE TABLE IF NOT EXIT tbl_drones_status (
+CREATE TABLE IF NOT EXISTS tbl_drones_status (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     drone_id INTEGER NOT NULL,
     status_id INTEGER NOT NULL,
@@ -38,24 +73,17 @@ CREATE TABLE IF NOT EXIT tbl_drones_status (
     operator_id INTEGER NOT NULL,
     status_update_time DATETIME NOT NULL,
     battery_level INTEGER NOT NULL,
-    coordinate TEXT,
+    latitude REAL,
+    longitude REAl,
+    altitude REAL,
+    direction REAL,
     is_flying BOOLEAN,
-    FOREIGN KEY (drone_id) REFERENCE tbl_drones(id)
-    FOREIGN KEY (status_id) REFERENCE tbl_status(id)
-    FOREIGN KEY (mission_id) REFERENCE tbl_mission(id)
-    FOREIGN KEY (operator_id) REFERENCE tbl_operators(id)
+    FOREIGN KEY (drone_id) REFERENCES tbl_drones(id)
+    FOREIGN KEY (status_id) REFERENCES tbl_status(id)
+    FOREIGN KEY (mission_id) REFERENCES tbl_missions(id)
+    FOREIGN KEY (operator_id) REFERENCES tbl_operators(id)
 )
 """)
 
-# Таблица "Техническое обслуживание"
-cursor.execute("""
-CREATE TABLE IF NOT EXIT tbl_maintenance (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    drone_id INTEGER NOT NULL,
-    last_maintenance DATE,
-    description TEXT,
-    FOREIGN KEY (drone_id) REFERENCE tbl_drones(id)
-)
-""")
-
-# Таблица "Миссия"
+connection.commit()
+connection.close()
