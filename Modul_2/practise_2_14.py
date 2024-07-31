@@ -30,17 +30,20 @@ class MemoryDroneRepository(DroneRepository):
         self._drones = {}
 
     def get_all_drones(self):
-        """Получить списко всех дронов памяти"""
+        """Получить список всех дронов в памяти"""
         return list(self._drones.values())
 
     def get_drone_by_id(self, id: int):
+        """Получить дрон по id"""
         return self._drones.get(id, None)
 
     def update_drone_status(self, id: int, status: str):
+        """Обновить статус дрона по id"""
         if id in self._drones:
             self._drones[id]['status'] = status
 
     def add_drone(self, drone: dict):
+        """Добавить дрон в словарь"""
         id = drone['id']
         self._drones[id] = drone
 
