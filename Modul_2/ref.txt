@@ -3,3 +3,7 @@
 https://github.com/pkolt/design_patterns
 2. Материалы по курсу (исходный код, задачи)
 https://drive.google.com/drive/u/0/folders/1iYcwUDnjN_hljHrRnAVjGmxuPbH-WJ_A
+3.Рефакторинг.Гуру посвящён тёмным материям программирования:
+ рефакторингу, паттернам проектирования, принципам SOLID и
+ другим важным темам из мира программирования.
+https://refactoringguru.cn/ru

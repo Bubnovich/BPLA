@@ -1,3 +1,4 @@
+#Install command - pip install opencv-python
 # паттерн Наблюдатель
 from abc import ABC, abstractmethod
 import cv2
@@ -51,17 +52,21 @@ class Camera(Observable):
         self.notify_observers(f"Изменен zoom на {self._zoom_lvl}")
 
     def take_image(self):
-        caption = cv2.VideoCapture(0)
-        ret, frame = caption.read()
-        if ret:
-            self.notify_observers("Захвачено изображение!", frame)
-        caption.release()
+        try:
+            caption = cv2.VideoCapture()
+            ret, frame = caption.read()
+            if ret:
+                self.notify_observers("Захвачено изображение!", frame)
+            caption.release()
+        except:
+            pass
 
 if __name__ == "__main__":
+    #Создаем наблюдателей
     data_logger = DataLogger()
     alert_system = AlertSystem()
     analysis_system = AnalysisSystem()
-
+    #Создаем налюдаемого
     camera = Camera()
 
     camera.add_observer(data_logger)
