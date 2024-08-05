@@ -7,7 +7,7 @@ SECRET_KEY = 'myKEY-111'
 def genetate_token(user_id):
     payload = {
         'user_id': user_id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+        "exp": datetime.datetime.now(tz=datetime.UTC) + datetime.timedelta(seconds=5)
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     return token
