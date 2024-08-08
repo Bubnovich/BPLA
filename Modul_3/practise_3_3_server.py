@@ -47,6 +47,41 @@ def takeoff():
         app.logger.error(f"Ошибка при взлете: {e}")
         return jsonify({"error": "Ошибка при взлете"}), 500
 
+@app.route("/drone/land", methods=["POST"])
+def land():
+    try:
+        # Проверка, находится ли дрон уже в воздухе
+        if drone_state["status"] == "landed":
+            return jsonify({"error": "Дрон уже на земле"}), 400
+
+        # Обновление статуса и высоты дрона
+        drone_state["status"] = "landed"
+        drone_state["position"]["altitude"] = 0.0
+
+        app.logger.info("Дрон приземлился")
+        return jsonify({
+            "message": "Приземление выполнено",
+            "drone_state": drone_state
+        }), 200
+    except Exception as e:
+        app.logger.error(f"Ошибка при приземлении: {e}")
+        return jsonify({"error": "Ошибка при посадке"}), 500
+
+@app.route("/update_position", methods=["POST", "PUT"])
+def update_posion():
+    data = request.json
+    if not data:
+        return jsonify({"error": "Ошибка в данных"}), 400
+
+    if request.method == "PUT":
+        drone_state["position"]["latitude"] = float(data["latitude"])
+        drone_state["position"]["longitude"] = float(data["longitude"])
+        drone_state["position"]["altitude"] = float(data["longitude"])
+        return jsonify({
+            "message": "Позиция обновлена",
+            "drone_state": drone_state
+        }), 200
+
 # Маршрут для приема телеметрических данных
 @app.route("/telemetry", methods=["POST"])
 def receive_telemetry():

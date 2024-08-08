@@ -32,26 +32,30 @@ def send_video(video_frame):
     else:
         print("Ошибка при отправке кадра")  # Ошибка при отправке кадра
 
+def takeoff():
+    response = requests.post(f"{base_url}drone/takeoff")
+    print(f"Взлет: {response.json}")
+
+def land():
+    response = requests.post(f"{base_url}drone/land")
+    print(f"Посадка: {response.json}")
+
+def update_position(latitude, longitude, altitude):
+    data = {
+        'latitude': latitude,
+        'longitude': longitude,
+        'altitude': altitude
+    }
+    response = requests.put(f"{base_url}update_position")
+    print(f"Обновление позиции: {response.json}")
 
 # Главная функция
 if __name__ == '__main__':
-    # Отправка телеметрических данных
-    send_telemetry(55.5555, 37.7777, 100.0)
+    takeoff()
+    time.sleep(2)
+    update_position(55.7558, 37.6176, 100)
+    time.sleep(2)
+    update_position(56.1366, 40.3966, 50)
+    time.sleep(2)
 
-    # Инициализация захвата видео с веб-камеры
-    cap = cv2.VideoCapture(0)
-
-    # Установка частоты кадров
-    fps = 60
-
-    # Цикл для захвата и отправки видео кадров
-    while cap.isOpened():
-        ret, frame = cap.read()  # Захват кадра
-        if not ret:
-            break  # Прерывание цикла, если кадр не захвачен
-        send_video(frame)  # Отправка видео кадра на сервер
-        time.sleep(1 / fps)  # Задержка для достижения нужного fps
-
-    # Освобождение захвата видео и уничтожение всех окон OpenCV
-    cap.release()
-    cv2.destroyAllWindows()
+    land()
