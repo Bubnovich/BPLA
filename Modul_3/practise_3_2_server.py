@@ -1,5 +1,5 @@
 #opencv-python
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import cv2
 import numpy as np
 
@@ -50,6 +50,20 @@ def receive_video():
     global video_frame
     np_array = np.frombuffer(request.data, dtype=np.uint8)
     video_frame = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
+    return "", 204
+
+@app.route("/video_feed")
+def video_feed():
+    def generate():
+        global video_frame
+        while True:
+            if video_frame is None:
+                _, buffer = cv2.imencode('.jpg', video_frame)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+    return Response(generate(), mimetype='multiprt/x-mixed-replace; boundary=frame')
 
 
 if __name__ == "__main__":
