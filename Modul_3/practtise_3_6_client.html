@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление дроном</title>
+</head>
+<body>
+<h1>Управление дроном Т-1000 </h1>
+    <button onclick="sendCommand('takeoff')">Взлет</button>
+    <button onclick="sendCommand('land')">Приземление</button>
+    <div id="status" style="border: 1px solid #ccc; padding: 10px">
+        <p>Лог дрона:</p>
+    </div>
+
+    <script>
+        const socket = new WebSocket("ws://localhost:8765")
+
+        socket.onopen = () => {
+            console.log("Соединение установлено")
+        }
+
+        socket.onmessage = () => {
+             consile.log("Сообщение от сервера:", event.data)
+        }
+
+        function updateStatus(status) {
+            const divStatus = document.getElementById("status");
+            const newStatus = document.createElement("p");
+            newStatus.textContent = status;
+            divStatus.appendChild(newStatus);
+        }
+
+        function sendCommand(command){
+            socket.send(command);
+            console.log("Отправлена команда:", command);
+        }
+    </script>
+</body>
+</html>
