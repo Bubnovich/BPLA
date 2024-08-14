@@ -14,7 +14,8 @@
     </div>
 
     <script>
-        const socket = new WebSocket("ws://localhost:8765")
+        const token = "valid_token"
+        const socket = new WebSocket(`ws://localhost:8765?token=${token}`)
 
         function updateStatus(status) {
             const divStatus = document.getElementById("status");

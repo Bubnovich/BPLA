@@ -8,8 +8,10 @@ async def control_dron(websocket, path):
             print(f"Получена команда: {msg}")
             if msg == "takeoff":
                 print(f"Дрон взлетает")
+                await websocket.send("Дрон взлетает")
             elif msg == "land":
                 print(f"Дрон приземляется")
+                await websocket.send("Дрон призелмляется")
     except websockets.ConnectionClosed as e:
         print(f"Соединение закрыто: {e}")
     except Exception as e:
