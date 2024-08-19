@@ -64,7 +64,7 @@ async def control_drone(websocket, path, msg):
 async def main():
     # Создание экземпляра прокси
     proxy = SecureProxy(control_drone)
-    # Запуск вебсокет-сервера
+    # Запуск вебсокет-сервеnра
     async with websockets.serve(proxy, host="localhost", port=8765) as server:
         try:
             # Ожидание закрытия сервера
