@@ -2,8 +2,8 @@ import requests
 
 BASE_URL - 'http://localhost:3000'
 def send_command(command):
-    response = requests.get(f"{BASE_URL}/{command}")
     try:
+        response = requests.get(f"{BASE_URL}/{command}")
         if response.status_code == 200:
             data = response.json()
             print('Сервер возвращает дату: ', data)

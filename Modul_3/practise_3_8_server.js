@@ -15,9 +15,10 @@ app.get('/time', (req, res) => {
     res.json({time: currentTime});
 });
 
-app.get('/time', (req, res) => {
+app.get('/:droneId/takeoff', (req, res) => {
     drone1.takeoff();
-    res.json({Drone_1: "Взлетел"});
+    const droneId = req.params.droneId;
+    res.json({status: `Дрон  + ${droneId} + взлетел`});
 });
 
 
